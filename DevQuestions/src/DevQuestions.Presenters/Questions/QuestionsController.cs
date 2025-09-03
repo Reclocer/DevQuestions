@@ -1,15 +1,24 @@
-using DtoQuestion.Contracts;
+using DevQuestion.Contracts;
+using DevQuestions.Application.Questions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DevQuestions.Presenters;
+namespace DevQuestions.Presenters.Questions;
 
 [ApiController]
 [Route("[controller]")]
 public class QuestionsController : ControllerBase
 {
+    private readonly IQuestionsService _questionsService;
+
+    public QuestionsController(IQuestionsService questionsService)
+    {
+        _questionsService = questionsService;
+    }
+    
    [HttpPost]
    public async Task<IActionResult> Create([FromBody] CreateQuestionDto request, CancellationToken cancellationToken)
    {
+       var questionId = await _questionsService.Create(request, cancellationToken);
        return Ok("Questions created");
    }
    
@@ -45,7 +54,6 @@ public class QuestionsController : ControllerBase
    }
 
    [HttpPost("{questionId:guid}/answers")]
-
    public async Task<IActionResult> AddAnswer([FromRoute] Guid questionId, [FromBody] AddAnswerDto request, 
        CancellationToken cancellationToken)
    {

@@ -1,3 +1,3 @@
-﻿namespace DtoQuestion.Contracts;
+﻿namespace DevQuestion.Contracts;
 
 public record AddAnswerDto(Guid UserId, string Title, string Text);
