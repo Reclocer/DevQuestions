@@ -1,4 +1,4 @@
-﻿using DevQuestion.Contracts;
+﻿using DtoQuestion.Contracts;
 
 namespace DevQuestions.Application.Questions;
 
