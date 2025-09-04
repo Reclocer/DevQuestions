@@ -13,6 +13,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\DevQuections.Domain\DevQuections.Domain.csproj" />
+      <ProjectReference Include="..\DevQuestion.Infrastructure.PostgresSql\DevQuestion.Infrastructure.PostgresSql.csproj" />
       <ProjectReference Include="..\DevQuestions.Presenters\DevQuestions.Presenters.csproj" />
     </ItemGroup>
 

@@ -1,4 +1,4 @@
-﻿using DevQuestion.Contracts;
+﻿using DtoQuestion.Contracts;
 using FluentValidation;
 
 namespace DevQuestions.Application.Questions;
@@ -8,12 +8,12 @@ public class CreateQuestionValidator : AbstractValidator<CreateQuestionDto>
     public CreateQuestionValidator()
     {
         RuleFor(x => x.Title)
-            .NotEmpty()
+            .NotEmpty().WithMessage("Заголовок не может быть пустым.")
             .MaximumLength(500)
             .WithMessage("Заголовок не валидный.");
         
         RuleFor(x => x.Text)
-            .NotEmpty()
+            .NotEmpty().WithMessage("Текст не может быть пустым.")
             .MaximumLength(5000)
             .WithMessage("Текст не валидный");
 

@@ -9,6 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\DevQuections.Domain\DevQuections.Domain.csproj" />
       <ProjectReference Include="..\DevQuestions.Contracts\DevQuestions.Contracts.csproj" />
+      <ProjectReference Include="..\SubSystems\SubSystems.csproj" />
     </ItemGroup>
 
     <ItemGroup>

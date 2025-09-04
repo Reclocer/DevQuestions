@@ -1,3 +1,3 @@
-﻿namespace DevQuestion.Contracts;
+﻿namespace DtoQuestion.Contracts;
 
 public record UpdateQuestionDto(string Title, string Body, Guid[] TagIds);
