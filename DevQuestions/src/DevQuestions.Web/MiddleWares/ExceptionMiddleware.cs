@@ -34,7 +34,11 @@ public class ExceptionMiddleware
         (int code, Error[]? errors) = exception switch
         {
             BadRequestException => (
+                StatusCodes.Status500InternalServerError, JsonSerializer.Deserialize<Error[]>(exception.Message)),
+            
+            NotFoundException => (
                 StatusCodes.Status404NotFound, JsonSerializer.Deserialize<Error[]>(exception.Message)),
+            
             _ => (StatusCodes.Status500InternalServerError, [Error.Failure(null, "Something went wrong")])
         };
 

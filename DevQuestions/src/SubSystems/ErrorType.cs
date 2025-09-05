@@ -2,8 +2,9 @@
 
 public enum ErrorType
 {
-    VALIDATION = 0,
-    NOT_FOUND = 1,
-    FAILURE = 2,
-    CONFLICT = 3,
+    NONE = 0,
+    VALIDATION = 1,
+    NOT_FOUND = 2,
+    FAILURE = 3,
+    CONFLICT = 4,
 }
