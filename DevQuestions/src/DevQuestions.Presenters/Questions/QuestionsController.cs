@@ -1,4 +1,5 @@
 using DevQuestions.Application.Questions;
+using DevQuestionsWeb.ResponseExtensions;
 using DtoQuestion.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,8 +19,14 @@ public class QuestionsController : ControllerBase
    [HttpPost]
    public async Task<IActionResult> Create([FromBody] CreateQuestionDto request, CancellationToken cancellationToken)
    {
-       var questionId = await _questionsService.Create(request, cancellationToken);
-       return Ok("Questions created");
+       var result = await _questionsService.Create(request, cancellationToken);
+
+       if (result.IsFailure)
+       {
+           return result.Error.ToResponse();
+       }
+       
+       return Ok(result.Value);
    }
    
    [HttpGet]

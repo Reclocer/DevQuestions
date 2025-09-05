@@ -1,7 +1,8 @@
-﻿using DevQuections.Domain.Questions;
+﻿using CSharpFunctionalExtensions;
+using DevQuections.Domain.Questions;
 using DevQuestions.Application.Extensions;
+using DevQuestions.Application.FulltextSearch;
 using DevQuestions.Application.Questions.QuestionErrors;
-using DevQuestions.Application.Questions.QuestionErrors.Exceptions;
 using DtoQuestion.Contracts;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
@@ -14,6 +15,7 @@ public class QuestionsService : IQuestionsService
     private readonly IQuestionsRepository _questionsRepository;
     private readonly ILogger<QuestionsService> _logger;
     private readonly IValidator<CreateQuestionDto> _validator;
+    private readonly ISearchProvider _searchProvider;
 
     public QuestionsService(
         IQuestionsRepository questionsRepository, 
@@ -25,14 +27,14 @@ public class QuestionsService : IQuestionsService
         _logger = logger;
     }
     
-    public async Task<Guid> Create(CreateQuestionDto questionDto, CancellationToken cancellationToken)
+    public async Task<Result<Guid, Failure>> Create(CreateQuestionDto questionDto, CancellationToken cancellationToken)
     {
         //Валидация входных данных 
         var validationResult = await _validator.ValidateAsync(questionDto, cancellationToken);
 
         if (!validationResult.IsValid)
         {
-            throw new QuestionValidationException(validationResult.ToErrors());
+            return validationResult.ToErrors();
         }
         
         //Валидация бизнес логики
@@ -41,11 +43,11 @@ public class QuestionsService : IQuestionsService
 
         if (openUserQuestionsCount > 3)
         {
-            throw new ToManyQuestionsException();
+            return Errors.Questions.ToManyQuestions().ToFailure();
         }
         
         var questionId = Guid.NewGuid();
-
+       
         var question = new Question(
             questionId,
             questionDto.Title,
@@ -56,6 +58,13 @@ public class QuestionsService : IQuestionsService
 
         //Создание сущности question в базе данных
         await _questionsRepository.AddAsync(question, cancellationToken);
+
+        // var indexResult = await _searchProvider.IndexQuestionAsync(question);
+        //
+        // if (indexResult.IsFailure)
+        // {
+        //     return indexResult.Error;
+        // }
 
         _logger.LogInformation("Question created with id {questionId}", questionId);
         return questionId;
